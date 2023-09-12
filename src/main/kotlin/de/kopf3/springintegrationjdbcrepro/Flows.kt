@@ -17,12 +17,12 @@ class Flows {
     ) = integrationFlow(flowChannelA) {
         aggregate {
             messageStore(jdbcMessageStore)
-            correlationStrategy(HeaderAttributeCorrelationStrategy("someHeader"))
+            correlationStrategy(HeaderAndTypeCorrelationStrategy("flowA", "someHeader"))
             releaseStrategy(MessageTypesReleaseStrategy("Flow A", listOf("x", "y")))
             expireGroupsUponCompletion(true)
         }
         handle {
-            println("Aggregation done")
+            println("[Flow A] Aggregation done")
             println(it)
         }
     }
@@ -34,12 +34,12 @@ class Flows {
     ) = integrationFlow(flowChannelB) {
         aggregate {
             messageStore(jdbcMessageStore)
-            correlationStrategy(HeaderAttributeCorrelationStrategy("someHeader"))
+            correlationStrategy(HeaderAndTypeCorrelationStrategy("flowB", "someHeader"))
             releaseStrategy(MessageTypesReleaseStrategy("Flow B", listOf("y", "z")))
             expireGroupsUponCompletion(true)
         }
         handle {
-            println("Aggregation done")
+            println("[Flow B] Aggregation done")
             println(it)
         }
     }
